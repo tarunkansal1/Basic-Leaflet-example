@@ -1,0 +1,40 @@
+---
+title: "Basic leaflet"
+author: "TARUN"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Date : 29/07/2020
+
+## We will create a map diaplaying various restaurants and data set we used here 
+## is from kaggle by Shruti Mehta.
+```{r}
+setwd("F:/R programing/Basic-Leaflet-example")
+zomato <- read.csv("zomato.csv")
+```
+
+
+## Now lets create a datastructure and map.
+```{r}
+library(leaflet)
+library(htmltools)
+df <- data.frame(Name = zomato$Restaurant.Name,
+                 City = zomato$City,
+                 Address = zomato$Address,
+                 Longitude = zomato$Longitude,
+                 Latitude = zomato$Latitude,
+                 rating = zomato$Aggregate.rating
+                 )
+map <- df %>% leaflet() %>% addTiles() %>% addMarkers(clusterOptions = markerClusterOptions(),popup = paste("<br>Name: ",
+                                                                    htmlEscape(df$Name),
+                                                                    "<br>City: ",
+                                                                    htmlEscape(df$City),
+                                                                    "<br>rating: ",
+                                                              formatC(df$rating, format = "d", big.mark = ",")))
+
+map
+```
